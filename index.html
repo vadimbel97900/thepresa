@@ -9,9 +9,10 @@
             box-sizing: border-box;
         }
 
-        .hide-controls {
-            display: none !important;
+       .hide-controls {
+    display: none !important;
         }
+
 
         body {
             display: flex;
@@ -24,13 +25,13 @@
 
         .slider-container {
             position: relative;
-            width: 90vw;
+            width: 90vw; /* Use viewport width for responsive scaling */
             max-width: 1250px;
             height: auto;
             overflow: hidden;
             border: 2px solid #ccc;
             background-color: #fff;
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 16 / 9; /* Maintain aspect ratio */
         }
 
         .slider {
@@ -59,10 +60,10 @@
         }
 
         .navigation-bottom {
-            bottom: 2vw;
+            bottom: 2vw; /* Increased padding to prevent clipping */
             left: 1vw;
-            padding: 0.5vw;
-            gap: 2.2vw;
+            padding: 0.5vw; /* Padding to ensure icons fit properly */
+            gap: 2.2vw; /* Increased gap between icons */
         }
 
         .nav {
@@ -77,28 +78,29 @@
             transform: scale(1.1);
         }
 
+        /* Sizes for bottom icons */
         .triangle {
             background-image: url('Иконки/Триугольник.png');
-            width: 1.7vw;
-            height: 1.7vw;
+            width: 1.7vw; /* Size for triangle */
+            height: 1.7vw; /* Size for triangle */
         }
 
         .home {
             background-image: url('Иконки/Дом.png');
-            width: 1.4vw;
-            height: 1.4vw;
+            width: 1.4vw; /* Size for home */
+            height: 1.4vw; /* Size for home */
         }
 
         .literature {
             background-image: url('Иконки/Литература.png');
-            width: 8.1vw;
-            height: 8.1vw;
+            width: 8.1vw; /* Size for literature */
+            height: 8.1vw; /* Size for literature */
         }
 
         .links {
             background-image: url('Иконки/Посилання.png');
-            width: 8.1vw;
-            height: 8.1vw;
+            width: 8.1vw; /* Size for links */
+            height: 8.1vw; /* Size for links */
         }
 
         .prev:hover {
@@ -129,14 +131,15 @@
             /* Add a hover effect if needed */
         }
 
+        /* Styles for overlay slide */
         .overlay-slide {
-            display: none;
+            display: none; /* Hidden by default */
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 20;
+            z-index: 20; /* Ensure it is on top of all other content */
         }
 
         .overlay-slide img {
@@ -147,63 +150,21 @@
 
         .close-button {
             position: absolute;
-            top: 42%;
-            left: 78%;
-            transform: translate(-50%, -50%);
-            width: 4vw;
-            height: 4vw;
+            top: 42%; /* Center vertically */
+            left: 78%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for center alignment */
+            width: 4vw; /* Size of close button */
+            height: 4vw; /* Size of close button */
             background-image: url('Иконки/Закрыть.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             cursor: pointer;
         }
-
-            /* Индикатор загрузки */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .loading-bar {
-            position: relative;
-            width: 80%;
-            height: 4px;
-            background-color: #ddd;
-        }
-
-        .loading-progress {
-            position: absolute;
-            height: 100%;
-            background-color: #5EC4B6; /* Цвет полоски загрузки */
-            width: 0%; /* Изначально ширина 0% */
-            transition: width 0.3s; /* Плавное изменение ширины */
-        }
-
-
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
     <div class="slider-container">
-        <!-- Индикатор загрузки -->
-        <div class="loading-overlay" id="loading-overlay">
-            <div class="loading-bar">
-                <div class="loading-progress" id="loading-progress"></div>
-            </div>
-        </div>
         <div class="slider">
             <!-- Слайды загружаются динамически -->
         </div>
@@ -220,7 +181,7 @@
         </div>
         <div class="overlay-slide" id="overlay-slide">
             <img id="overlay-image" src="" alt="Overlay Slide">
-            <div class="close-button" onclick="hideOverlay()"></div>
+            <div class="close-button" onclick="hideOverlay()"></div> <!-- Close button -->
         </div>
     </div>
     <script src="script.js"></script>
