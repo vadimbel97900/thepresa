@@ -3,10 +3,11 @@ const slides = [];
 const overlaySlide = document.getElementById('overlay-slide');
 const overlayImage = document.getElementById('overlay-image');
 const sliderContainer = document.querySelector('.slider');
+const loadingOverlay = document.getElementById('loading-overlay');
 
 // Загрузка всех слайдов из папки
 function loadSlides() {
-    const basePath = 'Картинки/'; // Путь к папке с изображениями
+    const basePath = 'Картинки/';
     const slideNumbers = [
         1, 2, 3, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 21, 23, 25, 27, 29,
         31, 33, 35, 38, 40, 42, 44, 46, 48, 50, 52, 54, 55, 57, 59, 61, 63,
@@ -14,8 +15,32 @@ function loadSlides() {
         90, 91, 92, 93, 94, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108,
         110, 111, 112, 113, 114
     ];
-    slideNumbers.forEach(num => slides.push(`${basePath}p (${num}).png`));
-    updateSlider();
+    
+    const imagesToLoad = [];
+    slideNumbers.forEach(num => imagesToLoad.push(`${basePath}p (${num}).png`));
+    
+    let loadedCount = 0;
+
+    function checkAllLoaded() {
+        if (loadedCount >= imagesToLoad.length) {
+            updateSlider();
+            loadingOverlay.style.display = 'none'; // Скрываем индикатор загрузки
+        }
+    }
+
+    imagesToLoad.forEach(src => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+            loadedCount++;
+            checkAllLoaded();
+        };
+        img.onerror = () => {
+            loadedCount++;
+            checkAllLoaded();
+        };
+        slides.push(src); // Добавляем изображение в массив
+    });
 }
 
 function updateSlider() {
@@ -27,7 +52,7 @@ function updateSlider() {
         } else if (src.includes('p (69).png')) {
             return `<video class="slide" controls>
                         <source src="SPIRIVA.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
+                        Ваш браузер не поддерживает тег video.
                     </video>`;
         } else {
             return `<img src="${src}" class="slide" alt="Slide ${index + 1}">`;
@@ -57,7 +82,6 @@ function showSlide(index) {
         controls.style.display = 'flex';
     }
 }
-
 
 // Переключение на следующий слайд
 function nextSlide() {
