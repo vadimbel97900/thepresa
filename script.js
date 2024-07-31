@@ -3,11 +3,10 @@ const slides = [];
 const overlaySlide = document.getElementById('overlay-slide');
 const overlayImage = document.getElementById('overlay-image');
 const sliderContainer = document.querySelector('.slider');
-const loadingOverlay = document.getElementById('loading-overlay');
 
 // Загрузка всех слайдов из папки
 function loadSlides() {
-    const basePath = 'Картинки/';
+    const basePath = 'Картинки/'; // Путь к папке с изображениями
     const slideNumbers = [
         1, 2, 3, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 21, 23, 25, 27, 29,
         31, 33, 35, 38, 40, 42, 44, 46, 48, 50, 52, 54, 55, 57, 59, 61, 63,
@@ -15,32 +14,8 @@ function loadSlides() {
         90, 91, 92, 93, 94, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108,
         110, 111, 112, 113, 114
     ];
-    
-    const imagesToLoad = [];
-    slideNumbers.forEach(num => imagesToLoad.push(`${basePath}p (${num}).png`));
-    
-    let loadedCount = 0;
-
-    function checkAllLoaded() {
-        if (loadedCount >= imagesToLoad.length) {
-            updateSlider();
-            loadingOverlay.style.display = 'none'; // Скрываем индикатор загрузки
-        }
-    }
-
-    imagesToLoad.forEach(src => {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-            loadedCount++;
-            checkAllLoaded();
-        };
-        img.onerror = () => {
-            loadedCount++;
-            checkAllLoaded();
-        };
-        slides.push(src); // Добавляем изображение в массив
-    });
+    slideNumbers.forEach(num => slides.push(`${basePath}p (${num}).png`));
+    updateSlider();
 }
 
 function updateSlider() {
@@ -52,7 +27,7 @@ function updateSlider() {
         } else if (src.includes('p (69).png')) {
             return `<video class="slide" controls>
                         <source src="SPIRIVA.mp4" type="video/mp4">
-                        Ваш браузер не поддерживает тег video.
+                        Your browser does not support the video tag.
                     </video>`;
         } else {
             return `<img src="${src}" class="slide" alt="Slide ${index + 1}">`;
@@ -70,7 +45,10 @@ function showSlide(index) {
         currentIndex = index;
     }
     const offset = -currentIndex * 100;
-    document.querySelector('.slider').style.transform = `translateX(${offset}%)`;
+    sliderContainer.style.transform = `translateX(${offset}%)`;
+
+    // Загрузка контента для текущего, предыдущего и следующего слайдов
+    updateSlideContents();
 
     // Скрыть или показать кнопки
     const controls = document.querySelector('.navigation-bottom');
@@ -83,55 +61,138 @@ function showSlide(index) {
     }
 }
 
-// Переключение на следующий слайд
-function nextSlide() {
-    showSlide(currentIndex + 1);
+function updateSlideContents() {
+    // Загрузка текущего и ближайших слайдов
+    const currentSlide = document.querySelector(`.slide:nth-child(${currentIndex + 1})`);
+    const prevSlide = document.querySelector(`.slide:nth-child(${currentIndex === 0 ? slides.length : currentIndex})`);
+    const nextSlide = document.querySelector(`.slide:nth-child(${currentIndex === slides.length - 1 ? 1 : currentIndex + 2})`);
+
+    loadSlideContent(currentSlide);
+    if (prevSlide) loadSlideContent(prevSlide);
+    if (nextSlide) loadSlideContent(nextSlide);
 }
 
-// Переключение на предыдущий слайд
-function prevSlide() {
-    showSlide(currentIndex - 1);
+function loadSlideContent(slide) {
+    if (slide) {
+        const media = slide.querySelector('img, iframe, video');
+        if (media) {
+            const src = media.src;
+            if (src) {
+                console.log(`Loading content for ${src}`);
+                // Здесь можно реализовать логику загрузки контента, если требуется
+            }
+        }
+    }
 }
 
-// Функция для обновления полоски загрузки
-function updateLoadingProgress(percentage) {
-    const progressElement = document.getElementById('loading-progress');
-    progressElement.style.width = `${percentage}%`;
+// Предварительная загрузка изображений и видео
+function preloadImages(imageUrls) {
+    imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+    });
+}
+
+function preloadVideo(url) {
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.src = url;
+}
+
+function getSlidesToPreload() {
+    return slides; // Включает все пути слайдов
+}
+
+function getLiteratureToPreload() {
+    const literatureMap = {
+        1: 'p (4).png',
+        2: 'p (4).png',
+        3: 'p (4).png',
+        4: 'p (11).png',
+        5: 'p (11).png',
+        6: 'p (11).png',
+        7: 'p (11).png',
+        8: 'p (11).png',
+        9: 'p (13).png',
+        10: 'p (15).png',
+        11: 'p (17).png',
+        12: 'p (19).png',
+        13: 'p (22).png',
+        14: 'p (22).png',
+        15: 'p (24).png',
+        16: 'p (26).png',
+        17: 'p (28).png',
+        18: 'p (30).png',
+        19: 'p (32).png',
+        20: 'p (34).png',
+        21: 'p (36).png',
+        22: 'p (39).png',
+        23: 'p (41).png',
+        24: 'p (43).png',
+        25: 'p (45).png',
+        26: 'p (47).png',
+        27: 'p (49).png',
+        28: 'p (51).png',
+        29: 'p (53).png',
+        30: 'p (56).png',
+        31: 'p (56).png',
+        32: 'p (58).png',
+        33: 'p (60).png',
+        34: 'p (62).png',
+        35: 'p (64).png',
+        36: 'p (66).png',
+        37: 'p (68).png',
+        38: 'p (68).png',
+        39: 'p (68).png',
+        40: 'p (72).png',
+        41: 'p (74).png',
+        42: 'p (76).png',
+        43: 'p (78).png',
+        44: 'p (80).png',
+        45: 'p (80).png',
+        46: 'p (80).png',
+        47: 'p (80).png',
+        48: 'p (80).png',
+        49: 'p (80).png',
+        50: 'p (80).png',
+        51: 'p (80).png',
+        52: 'p (89).png',
+        53: 'p (89).png',
+        54: 'p (89).png',
+        55: 'p (89).png',
+        56: 'p (89).png',
+        57: 'p (95).png',
+        58: 'p (95).png',
+        59: 'p (95).png',
+        60: 'p (95).png',
+        61: 'p (95).png',
+        62: 'p (102).png',
+        63: 'p (102).png',
+        64: 'p (102).png',
+        65: 'p (102).png',
+        66: 'p (102).png',
+        67: 'p (109).png',
+        68: 'p (109).png',
+        69: 'p (109).png',
+        70: 'p (109).png',
+        71: 'p (109).png',
+        72: 'p (109).png'
+    };
+    return Object.values(literatureMap).map(image => `Литература/${image}`);
+}
+
+function getVideosToPreload() {
+    return ['SPIRIVA.mp4']; // Список ваших видео
 }
 
 // Открытие оверлея
 function showOverlay(imageSrc) {
     document.body.style.overflow = 'hidden'; // Отключение прокрутки
-    document.getElementById('loading-overlay').style.display = 'flex'; // Показываем индикатор загрузки
     overlayImage.src = imageSrc;
+    overlaySlide.style.display = 'flex'; // Показываем оверлей
 
-    // Проверяем тип контента
-    if (imageSrc.endsWith('.png') || imageSrc.endsWith('.jpg')) {
-        const img = new Image();
-        img.src = imageSrc;
-
-        img.onload = () => {
-            updateLoadingProgress(100); // Устанавливаем 100% после загрузки
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
-                overlaySlide.style.display = 'flex'; // Показываем оверлей
-                updateCloseButtonPosition(imageSrc);
-            }, 300); // Небольшая задержка для плавного исчезновения
-        };
-
-        img.onerror = () => {
-            console.error(`Ошибка загрузки изображения: ${imageSrc}`);
-            updateLoadingProgress(100); // Устанавливаем 100% в случае ошибки
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
-            }, 300); // Небольшая задержка для плавного исчезновения
-        };
-    } else {
-        overlaySlide.style.display = 'flex'; // Показываем оверлей, если это не изображение
-        updateLoadingProgress(100); // Устанавливаем 100% сразу
-        document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
-        updateCloseButtonPosition(imageSrc);
-    }
+    // Обновление позиции крестика
+    updateCloseButtonPosition(imageSrc);
 }
 
 // Закрытие оверлея
@@ -139,8 +200,6 @@ function hideOverlay() {
     document.body.style.overflow = ''; // Включение прокрутки
     overlaySlide.style.display = 'none'; // Скрываем оверлей
 }
-
-
 
 // Обработка клика по кнопке литературы
 function handleLiteratureClick() {
@@ -297,6 +356,21 @@ const closeButtonPositions = {
 // Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     loadSlides();
-    document.querySelector('.links').addEventListener('click', () => showOverlay('Posilanna/Посилання.png'));
-    document.querySelector('.literature').addEventListener('click', handleLiteratureClick);
+    document.querySelector('.nav.literature').addEventListener('click', handleLiteratureClick);
+    document.querySelector('.close-button').addEventListener('click', hideOverlay);
+
+    // Предварительная загрузка изображений и видео
+    preloadImages(getSlidesToPreload());
+    preloadImages(getLiteratureToPreload());
+    getVideosToPreload().forEach(preloadVideo);
 });
+
+// Переключение на следующий слайд
+function nextSlide() {
+    showSlide(currentIndex + 1);
+}
+
+// Переключение на предыдущий слайд
+function prevSlide() {
+    showSlide(currentIndex - 1);
+}
