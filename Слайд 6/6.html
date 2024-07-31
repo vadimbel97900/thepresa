@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slider Animation</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Масштабирование изображения */
+    z-index: -3;
+  }
+
+  .slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .slider .background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+  }
+
+  .slider .background img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Масштабирование изображения */
+  }
+
+  .slider .foreground {
+    position: absolute;
+    height: 100%;
+    background-color: rgba(117, 189, 180, 0.55); /* Новый цвет */
+    z-index: -2;
+    border-right: 0.5vw dotted white; /* Размер пунктирных точек изменен пропорционально */
+  }
+
+  .slider .handle {
+    position: absolute;
+    width: 10vw; /* Размер ползунка изменен пропорционально */
+    height: 10vw;
+    background: url('Ползунок1.png') no-repeat center center;
+    background-size: cover;
+    cursor: pointer;
+    z-index: 1;
+    border-radius: 50%; /* Круглая форма ползунка */
+    /* Начальная позиция ползунка */
+    left: calc(50% - 5vw); /* Центрирование ползунка по горизонтали */
+  }
+
+  .content {
+    position: absolute;
+    top: 35%; /* Центрирование по вертикали */
+    left: 50%; /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%); /* Центрирование */
+    width: 60%; /* Ширина блока контента */
+    display: flex;
+    justify-content: space-between; /* Распределение контента по обеим сторонам */
+    text-align: center;
+    color: #fff;
+  }
+
+  .content .hoz, .content .ba {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content .hoz {
+    font-size: 3vw; /* Размер текста для ХОЗЛ изменен пропорционально */
+    font-weight: 500; /* Жирное начертание для процентов */
+    margin-bottom: 1vw; /* Уменьшение пространства ниже текста */
+  }
+
+  .content .ba {
+    font-size: 3vw; /* Размер текста для БА изменен пропорционально */
+    font-weight: 500; /* Жирное начертание для процентов */
+    margin-bottom: 1vw; /* Уменьшение пространства ниже текста */
+  }
+
+  .content .hoz .percent, .content .ba .percent {
+    font-size: 4vw; /* Размер шрифта для процентов изменен пропорционально */
+    font-weight: 900; /* Очень жирное начертание для процентов */
+    margin-top: -1vw; /* Уменьшение пространства между текстом и процентами */
+  }
+
+  .button {
+    position: absolute;
+    bottom: 2vw; /* Отступ снизу для кнопки изменен пропорционально */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: red;
+    color: white;
+    padding: 1vw 2vw; /* Размеры отступов внутри кнопки изменены пропорционально */
+    border: none;
+    border-radius: 1.5vw; /* Скругление кнопки изменено пропорционально */
+    cursor: pointer;
+    font-size: 1.5vw; /* Размер текста на кнопке изменен пропорционально */
+  }
+
+  .top-curve, .bottom-curve {
+    position: absolute;
+    width: 79vw; /* 1222px / 1920px * 100% */
+    height: 33.5vw; /* 520px / 1920px * 100% */
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+    background-size: cover; /* Масштабирование фона для корректного отображения */
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .top-curve {
+    top: 0;
+    transform: translateY(-25vw); /* Смещение верхней полосы вверх за экран (380px / 1920px * 100%) */
+    background-image: url('полосаверх.png'); /* Фоновое изображение для верхней полосы */
+  }
+
+  .bottom-curve {
+    bottom: 0;
+    transform: translateY(25vw); /* Смещение нижней полосы вверх за экран (380px / 1920px * 100%) */
+    background-image: url('Полосаниз.png'); /* Фоновое изображение для нижней полосы */
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <img src="фон1.png" alt="Background" class="background-image">
+
+  <!-- Верхняя белая полоса -->
+  <div class="top-curve"></div>
+  
+  <div class="slider">
+    <div class="background">
+      <img src="image.png" alt="Background Image">
+    </div>
+    <div class="foreground"></div>
+    <div class="handle"></div>
+  </div>
+  
+  <div class="content">
+    <div class="hoz">ХОЗЛ <span class="percent" id="hoz-percent">33%</span></div>
+    <div class="ba">БА <span class="percent" id="ba-percent">67%</span></div>
+  </div>
+  
+  <!-- Нижняя белая полоса -->
+  <div class="bottom-curve"></div>
+  
+  <button class="button" onclick="setPercentages(33, 67)">ПРАВИЛЬНА ВІДПОВІДЬ</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
