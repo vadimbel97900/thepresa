@@ -25,6 +25,11 @@ function updateSlider() {
             return `<iframe src="Слайд 6/6.html" class="slide" frameborder="0"></iframe>`;
         } else if (src.includes('p (7).png')) {
             return `<iframe src="Слайд 7/7.html" class="slide" frameborder="0"></iframe>`;
+        } else if (src.includes('p (69).png')) {
+            return `<video class="slide" controls>
+                        <source src="SPIRIVA.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>`;
         } else {
             return `<img src="${src}" class="slide" alt="Slide ${index + 1}">`;
         }
@@ -32,7 +37,6 @@ function updateSlider() {
     showSlide(currentIndex);
 }
 
-// Показывает слайд по индексу
 function showSlide(index) {
     if (index >= slides.length) {
         currentIndex = 0;
@@ -46,12 +50,15 @@ function showSlide(index) {
 
     // Скрыть или показать кнопки
     const controls = document.querySelector('.navigation-bottom');
-    if (slides[currentIndex].includes('6.html') || slides[currentIndex].includes('p (6).png') || slides[currentIndex].includes('7.html') || slides[currentIndex].includes('p (7).png')) {
+    if (slides[currentIndex].includes('6.html') || slides[currentIndex].includes('p (6).png') ||
+        slides[currentIndex].includes('7.html') || slides[currentIndex].includes('p (7).png') ||
+        slides[currentIndex].includes('SPIRIVA.mp4') || slides[currentIndex].includes('p (69).png')) {
         controls.style.display = 'none';
     } else {
         controls.style.display = 'flex';
     }
 }
+
 
 // Переключение на следующий слайд
 function nextSlide() {
