@@ -93,14 +93,45 @@ function prevSlide() {
     showSlide(currentIndex - 1);
 }
 
+// Функция для обновления полоски загрузки
+function updateLoadingProgress(percentage) {
+    const progressElement = document.getElementById('loading-progress');
+    progressElement.style.width = `${percentage}%`;
+}
+
 // Открытие оверлея
 function showOverlay(imageSrc) {
     document.body.style.overflow = 'hidden'; // Отключение прокрутки
+    document.getElementById('loading-overlay').style.display = 'flex'; // Показываем индикатор загрузки
     overlayImage.src = imageSrc;
-    overlaySlide.style.display = 'flex'; // Показываем оверлей
 
-    // Обновление позиции крестика
-    updateCloseButtonPosition(imageSrc);
+    // Проверяем тип контента
+    if (imageSrc.endsWith('.png') || imageSrc.endsWith('.jpg')) {
+        const img = new Image();
+        img.src = imageSrc;
+
+        img.onload = () => {
+            updateLoadingProgress(100); // Устанавливаем 100% после загрузки
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
+                overlaySlide.style.display = 'flex'; // Показываем оверлей
+                updateCloseButtonPosition(imageSrc);
+            }, 300); // Небольшая задержка для плавного исчезновения
+        };
+
+        img.onerror = () => {
+            console.error(`Ошибка загрузки изображения: ${imageSrc}`);
+            updateLoadingProgress(100); // Устанавливаем 100% в случае ошибки
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
+            }, 300); // Небольшая задержка для плавного исчезновения
+        };
+    } else {
+        overlaySlide.style.display = 'flex'; // Показываем оверлей, если это не изображение
+        updateLoadingProgress(100); // Устанавливаем 100% сразу
+        document.getElementById('loading-overlay').style.display = 'none'; // Скрываем индикатор загрузки
+        updateCloseButtonPosition(imageSrc);
+    }
 }
 
 // Закрытие оверлея
@@ -108,6 +139,8 @@ function hideOverlay() {
     document.body.style.overflow = ''; // Включение прокрутки
     overlaySlide.style.display = 'none'; // Скрываем оверлей
 }
+
+
 
 // Обработка клика по кнопке литературы
 function handleLiteratureClick() {
