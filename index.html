@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #progress {
+            margin-top: 20px;
+            width: 300px;
+            height: 25px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div>Loading... Please wait</div>
+        <div id="progress">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        const resources = [
+            // Images from Картинки folder
+            'Картинки/p (1).png', 'Картинки/p (2).png', 'Картинки/p (3).png', 'Картинки/p (6).png',
+            'Картинки/p (7).png', 'Картинки/p (8).png', 'Картинки/p (9).png', 'Картинки/p (10).png',
+            'Картинки/p (12).png', 'Картинки/p (14).png', 'Картинки/p (16).png', 'Картинки/p (18).png',
+            'Картинки/p (20).png', 'Картинки/p (21).png', 'Картинки/p (23).png', 'Картинки/p (25).png',
+            'Картинки/p (27).png', 'Картинки/p (29).png', 'Картинки/p (31).png', 'Картинки/p (33).png',
+            'Картинки/p (35).png', 'Картинки/p (38).png', 'Картинки/p (40).png', 'Картинки/p (42).png',
+            'Картинки/p (44).png', 'Картинки/p (46).png', 'Картинки/p (48).png', 'Картинки/p (50).png',
+            'Картинки/p (52).png', 'Картинки/p (54).png', 'Картинки/p (55).png', 'Картинки/p (57).png',
+            'Картинки/p (59).png', 'Картинки/p (61).png', 'Картинки/p (63).png', 'Картинки/p (65).png',
+            'Картинки/p (67).png', 'Картинки/p (69).png', 'Картинки/p (70).png', 'Картинки/p (71).png',
+            'Картинки/p (73).png', 'Картинки/p (75).png', 'Картинки/p (77).png', 'Картинки/p (79).png',
+            'Картинки/p (81).png', 'Картинки/p (82).png', 'Картинки/p (83).png', 'Картинки/p (84).png',
+            'Картинки/p (85).png', 'Картинки/p (86).png', 'Картинки/p (87).png', 'Картинки/p (88).png',
+            'Картинки/p (90).png', 'Картинки/p (91).png', 'Картинки/p (92).png', 'Картинки/p (93).png',
+            'Картинки/p (94).png', 'Картинки/p (97).png', 'Картинки/p (98).png', 'Картинки/p (99).png',
+            'Картинки/p (100).png', 'Картинки/p (101).png', 'Картинки/p (104).png', 'Картинки/p (105).png',
+            'Картинки/p (106).png', 'Картинки/p (107).png', 'Картинки/p (108).png', 'Картинки/p (110).png',
+            'Картинки/p (111).png', 'Картинки/p (112).png', 'Картинки/p (113).png',
+            // Images from Литература folder
+            'Литература/p (4).png', 'Литература/p (11).png', 'Литература/p (13).png', 'Литература/p (15).png',
+            'Литература/p (17).png', 'Литература/p (19).png', 'Литература/p (22).png', 'Литература/p (24).png',
+            'Литература/p (26).png', 'Литература/p (28).png', 'Литература/p (30).png', 'Литература/p (32).png',
+            'Литература/p (34).png', 'Литература/p (36).png', 'Литература/p (37).png', 'Литература/p (39).png',
+            'Литература/p (41).png', 'Литература/p (43).png', 'Литература/p (45).png', 'Литература/p (47).png',
+            'Литература/p (49).png', 'Литература/p (51).png', 'Литература/p (53).png', 'Литература/p (56).png',
+            'Литература/p (58).png', 'Литература/p (60).png', 'Литература/p (62).png', 'Литература/p (64).png',
+            'Литература/p (66).png', 'Литература/p (68).png', 'Литература/p (72).png', 'Литература/p (74).png',
+            'Литература/p (76).png', 'Литература/p (78).png', 'Литература/p (80).png', 'Литература/p (89).png',
+            'Литература/p (95).png', 'Литература/p (96).png', 'Литература/p (102).png', 'Литература/p (103).png',
+            'Литература/p (109).png',
+            // Image from Posilanna folder
+            'Posilanna/Посилання.png',
+            // HTML files from Слайды folders
+            'Слайд 6/6.html', 'Слайд 7/7.html'
+        ];
+
+        const progressBar = document.getElementById('progress-bar');
+        let loadedCount = 0;
+
+        function resourceLoaded() {
+            loadedCount++;
+            const progressPercentage = (loadedCount / resources.length) * 100;
+            progressBar.style.width = progressPercentage + '%';
+
+            if (loadedCount === resources.length) {
+                window.location.href = 'Start.html';
+            }
+        }
+
+        resources.forEach(resource => {
+            if (resource.endsWith('.html')) {
+                fetch(resource).then(resourceLoaded).catch(resourceLoaded);
+            } else {
+                const img = new Image();
+                img.src = resource;
+                img.onload = resourceLoaded;
+                img.onerror = resourceLoaded;
+            }
+        });
+    </script>
+</body>
+</html>
