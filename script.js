@@ -357,6 +357,7 @@ const closeButtonPositions = {
 document.addEventListener('DOMContentLoaded', () => {
     loadSlides();
     document.querySelector('.nav.literature').addEventListener('click', handleLiteratureClick);
+    document.querySelector('.nav.links').addEventListener('click', () => showOverlay('Posilanna/Посилання.png'));
     document.querySelector('.close-button').addEventListener('click', hideOverlay);
 
     // Предварительная загрузка изображений и видео
