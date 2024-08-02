@@ -4,43 +4,134 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'slider2', cursor: 'cursor2', highlight: 'highlight2', start: 22 }
     ];
 
-    sliders.forEach(slider => {
+    function updateSliderPosition(slider, x) {
         const sliderElement = document.getElementById(slider.id);
         const cursorElement = document.getElementById(slider.cursor);
         const highlightElement = document.getElementById(slider.highlight);
         const trackElement = sliderElement.querySelector('.track');
         const trackRect = trackElement.getBoundingClientRect();
 
-        let isDragging = false;
+        let left = x - trackRect.left;
+        left = Math.max(0, Math.min(left, trackRect.width)); // Ограничение в пределах трека
 
-        function updateSliderPosition(x) {
-            let left = x - trackRect.left;
-            if (left < 0) left = 0;
-            if (left > trackRect.width) left = trackRect.width;
+        const value = Math.round((left / trackRect.width) * 25); // Значение ползунка на шкале от 0 до 25
 
-            const percentage = left / trackRect.width;
-            const value = Math.round(percentage * 24) + 1;
+        cursorElement.style.left = `${left - cursorElement.offsetWidth / 2}px`;
+        highlightElement.style.width = `${left}px`;
+
+        const numbers = sliderElement.querySelectorAll('.number');
+        numbers.forEach((number, index) => {
+            number.style.backgroundColor = index + 1 === value ? 'red' : 'transparent';
+        });
+        
+        // Сохранение текущего значения
+        slider.currentValue = value;
+    }
+
+    function initializeSliders() {
+        sliders.forEach(slider => {
+            const sliderElement = document.getElementById(slider.id);
+            const cursorElement = document.getElementById(slider.cursor);
+            const highlightElement = document.getElementById(slider.highlight);
+            const trackElement = sliderElement.querySelector('.track');
+            const trackRect = trackElement.getBoundingClientRect();
+
+            // Установка начальной позиции
+            const initialLeft = (slider.start / 25) * trackRect.width;
+            cursorElement.style.left = `${initialLeft - cursorElement.offsetWidth / 2}px`;
+            highlightElement.style.width = `${initialLeft}px`;
+
+            slider.currentValue = slider.start; // Сохраняем начальное значение
+        });
+    }
+
+    function updateOnResize() {
+        sliders.forEach(slider => {
+            const sliderElement = document.getElementById(slider.id);
+            const cursorElement = document.getElementById(slider.cursor);
+            const highlightElement = document.getElementById(slider.highlight);
+            const trackElement = sliderElement.querySelector('.track');
+            const trackRect = trackElement.getBoundingClientRect();
+
+            // Пересчет позиции курсора по сохраненному значению
+            const percentage = (slider.currentValue / 25);
+            const newLeft = percentage * trackRect.width;
+            cursorElement.style.left = `${Math.max(0, Math.min(newLeft, trackRect.width)) - cursorElement.offsetWidth / 2}px`;
+            highlightElement.style.width = `${Math.max(0, Math.min(newLeft, trackRect.width))}px`;
+
+            // Обновление цвета фона за номером
+            const numbers = sliderElement.querySelectorAll('.number');
+            numbers.forEach((number, index) => {
+                number.style.backgroundColor = index + 1 === slider.currentValue ? 'red' : 'transparent';
+            });
+        });
+    }
+
+    function setValues(value1, value2) {
+        sliders.forEach((slider, index) => {
+            const sliderElement = document.getElementById(slider.id);
+            const cursorElement = document.getElementById(slider.cursor);
+            const highlightElement = document.getElementById(slider.highlight);
+            const trackElement = sliderElement.querySelector('.track');
+            const trackRect = trackElement.getBoundingClientRect();
+
+            // Определение значения на основе индекса ползунка
+            let value = index === 0 ? value1 : value2;
+            let left = (value / 25) * trackRect.width; // Позиция курсора в пикселях
+            let displayValue = value; // Значение для отображения
 
             cursorElement.style.left = `${left - cursorElement.offsetWidth / 2}px`;
             highlightElement.style.width = `${left}px`;
 
-            // Обновить цвет фона за номером
             const numbers = sliderElement.querySelectorAll('.number');
             numbers.forEach((number, index) => {
-                number.style.backgroundColor = index + 1 === value ? 'red' : 'transparent';
+                number.style.backgroundColor = index + 1 === displayValue ? 'red' : 'transparent';
             });
-        }
+
+            slider.currentValue = displayValue; // Сохраняем значение
+        });
+    }
+
+    function setDefaultValues() {
+        const value1 = 8; // Начальное значение для первого ползунка
+        const value2 = 22; // Начальное значение для второго ползунка
+
+        setValues(value1, value2);
+    }
+
+    // Инициализация ползунков
+    initializeSliders();
+
+    // Установка начальных значений после загрузки страницы
+    setDefaultValues();
+
+    // Обработчик события для кнопки
+    document.querySelector('.button').addEventListener('click', () => {
+        const value1 = 3; // Значение для первого ползунка
+        const value2 = 24; // Значение для второго ползунка
+
+        setValues(value1, value2);
+    });
+
+    // Обработчики событий для ползунков
+    sliders.forEach(slider => {
+        const sliderElement = document.getElementById(slider.id);
+        const cursorElement = document.getElementById(slider.cursor);
+        const trackElement = sliderElement.querySelector('.track');
+        const trackRect = trackElement.getBoundingClientRect();
+
+        let isDragging = false;
 
         function onMouseMove(event) {
             if (!isDragging) return;
 
-            updateSliderPosition(event.clientX);
+            updateSliderPosition(slider, event.clientX);
         }
 
         function onMouseDown(event) {
-            event.preventDefault(); // предотвращаем выделение текста и другие нежелательные действия
+            event.preventDefault();
             isDragging = true;
-            updateSliderPosition(event.clientX);
+            updateSliderPosition(slider, event.clientX);
         }
 
         function onMouseUp() {
@@ -51,17 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
 
-        // Поддержка для мобильных устройств
         cursorElement.addEventListener('touchstart', (event) => {
-            event.preventDefault(); // предотвращаем прокрутку страницы
+            event.preventDefault();
             isDragging = true;
-            updateSliderPosition(event.touches[0].clientX);
+            updateSliderPosition(slider, event.touches[0].clientX);
         });
 
         document.addEventListener('touchmove', (event) => {
             if (!isDragging) return;
 
-            updateSliderPosition(event.touches[0].clientX);
+            updateSliderPosition(slider, event.touches[0].clientX);
         });
 
         document.addEventListener('touchend', () => {
@@ -69,53 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    function setPercentages(percent1, percent2) {
-        const sliders = [
-            { id: 'slider1', cursor: 'cursor1', highlight: 'highlight1' },
-            { id: 'slider2', cursor: 'cursor2', highlight: 'highlight2' }
-        ];
-
-        sliders.forEach((slider, index) => {
-            const sliderElement = document.getElementById(slider.id);
-            const cursorElement = document.getElementById(slider.cursor);
-            const highlightElement = document.getElementById(slider.highlight);
-            const trackElement = sliderElement.querySelector('.track');
-            const trackRect = trackElement.getBoundingClientRect();
-
-            let percentage = index === 0 ? percent1 : percent2;
-            let left = (percentage / 100) * trackRect.width;
-            let value = Math.round((left / trackRect.width) * 24) + 1;
-
-            cursorElement.style.left = `${left - cursorElement.offsetWidth / 2}px`;
-            highlightElement.style.width = `${left}px`;
-
-            // Обновить цвет фона за номером
-            const numbers = sliderElement.querySelectorAll('.number');
-            numbers.forEach((number, index) => {
-                number.style.backgroundColor = index + 1 === value ? 'red' : 'transparent';
-            });
-        });
-    }
-
-    function setDefaultValues() {
-        // Рассчитать процентное значение для каждого слайдера
-        const percent1 = ((8 - 1) / 24) * 100; // Учитываем 24 цифры
-        const percent2 = ((22 - 1) / 24) * 100;
-
-        // Установить значения на слайдерах
-        setPercentages(percent1, percent2);
-    }
-
-    // Вызов функции после загрузки страницы
-    setDefaultValues();
-
-    // Обработчик события для кнопки
-    document.querySelector('.button').addEventListener('click', () => {
-        // Рассчитать процентное значение для 3 и 24
-        const percent1 = ((3 - 1) / 24) * 100;
-        const percent2 = ((24 - 1) / 24) * 100;
-
-        // Установить значения на слайдерах
-        setPercentages(percent1, percent2);
-    });
+    // Обработчик изменения размера окна
+    window.addEventListener('resize', updateOnResize);
 });
