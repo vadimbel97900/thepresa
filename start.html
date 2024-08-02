@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+       .hide-controls {
+    display: none !important;
+        }
+
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 90vw; /* Use viewport width for responsive scaling */
+            max-width: 1250px;
+            height: auto;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            background-color: #fff;
+            aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+        }
+
+        .slider {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .navigation-top,
+        .navigation-bottom {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .navigation-top {
+            top: 1vw;
+            left: 1vw;
+        }
+
+        .navigation-bottom {
+            bottom: 2vw; /* Increased padding to prevent clipping */
+            left: 1vw;
+            padding: 0.5vw; /* Padding to ensure icons fit properly */
+            gap: 2.2vw; /* Increased gap between icons */
+        }
+
+        .nav {
+            cursor: pointer;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .nav:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sizes for bottom icons */
+        .triangle {
+            background-image: url('Иконки/Триугольник.png');
+            width: 1.7vw; /* Size for triangle */
+            height: 1.7vw; /* Size for triangle */
+        }
+
+        .home {
+            background-image: url('Иконки/Дом.png');
+            width: 1.4vw; /* Size for home */
+            height: 1.4vw; /* Size for home */
+        }
+
+        .literature {
+            background-image: url('Иконки/Литература.png');
+            width: 8.1vw; /* Size for literature */
+            height: 8.1vw; /* Size for literature */
+        }
+
+        .links {
+            background-image: url('Иконки/Посилання.webp');
+            width: 8.1vw; /* Size for links */
+            height: 8.1vw; /* Size for links */
+        }
+
+        .prev:hover {
+            background-image: url('Иконки/Назад актив.png');
+        }
+
+        .next:hover {
+            background-image: url('Иконки/Вперед актив.png');
+        }
+
+        .dots:hover {
+            /* Add a hover effect if needed */
+        }
+
+        .triangle:hover {
+            /* Add a hover effect if needed */
+        }
+
+        .home:hover {
+            /* Add a hover effect if needed */
+        }
+
+        .literature:hover {
+            /* Add a hover effect if needed */
+        }
+
+        .links:hover {
+            /* Add a hover effect if needed */
+        }
+
+        /* Styles for overlay slide */
+        .overlay-slide {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20; /* Ensure it is on top of all other content */
+        }
+
+        .overlay-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 42%; /* Center vertically */
+            left: 78%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for center alignment */
+            width: 4vw; /* Size of close button */
+            height: 4vw; /* Size of close button */
+            background-image: url('Иконки/Закрыть.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slider">
+            <!-- Слайды загружаются динамически -->
+        </div>
+        <div class="navigation-top">
+            <div class="nav dots" style="background-image: url('Иконки/3 точки.png'); width: 2.5vw; height: 2.5vw;"></div>
+            <div class="nav prev" onclick="prevSlide()" style="background-image: url('Иконки/Назад.png'); width: 2.5vw; height: 2.5vw;"></div>
+            <div class="nav next" onclick="nextSlide()" style="background-image: url('Иконки/Вперед.png'); width: 2.5vw; height: 2.5vw;"></div>
+        </div>
+        <div class="navigation-bottom" style="bottom: -2.3vw; left: 1vw; padding: 0.5vw; gap: 2.2vw;">
+            <div class="nav triangle" style="background-image: url('Иконки/Триугольник.png'); width: 1.7vw; height: 1.7vw;"></div>
+            <div class="nav home" style="background-image: url('Иконки/Дом.png'); width: 1.4vw; height: 1.4vw;"></div>
+            <div class="nav literature" style="background-image: url('Иконки/Литература.png'); width: 8.1vw; height: 8.1vw;"></div>
+            <div class="nav links" style="background-image: url('Иконки/Посилання.webp'); width: 8.1vw; height: 8.1vw;"></div>
+        </div>
+        <div class="overlay-slide" id="overlay-slide">
+            <img id="overlay-image" src="" alt="Overlay Slide">
+            <div class="close-button" onclick="hideOverlay()"></div> <!-- Close button -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

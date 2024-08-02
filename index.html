@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Контейнер для загрузчика и текста */
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Текст загрузки */
+        .loading-text {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        /* Полоса прогресса */
+        .progress-bar {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 30px;
+        }
+
+        .progress-bar div {
+            height: 100%;
+            background-color: #8AD1C6;
+            width: 0;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .progress-text {
+            margin-top: 15px;
+            font-size: 1.5em;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loader">
+        <div class="loading-text" id="loading-text">Belousov.incorp</div>
+        <div class="progress-bar">
+            <div id="progress"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0%</div>
+    </div>
+    <iframe id="content-frame" src="start.html"></iframe>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const loadingText = document.getElementById('loading-text');
+            const iframe = document.getElementById('content-frame');
+            const loader = document.getElementById('loader');
+
+            const loadingMessages = [
+                "Инициализация",
+                "Подключение к серверу",
+                "Проверка подключения",
+                "Настройка параметров",
+                "Инициализация компонентов",
+                "Инициализация сервиса",
+                "Подготовка к запуску",
+                "Подготовка данных",
+                "Загрузка данных",
+                "Загрузка файлов",
+                "Загрузка изображений",
+                "Загрузка контента",
+                "Начало загрузки",
+                "Обработка запроса",
+                "Выполнение запроса",
+                "Проверка обновлений",
+                "Обновление информации",
+                "Обновление состояния",
+                "Синхронизация данных",
+                "Проверка целостности",
+                "Сохранение изменений",
+                "Обработка данных",
+                "Завершение загрузки",
+                "Завершение обработки",
+                "Завершение инициализации",
+                "Выполнение инициализации",
+                "Обработка ошибок",
+                "Подготовка к обработке",
+                "Обновляем информацию",
+                "Загружаем файлы"
+            ];
+
+            let messageIndex = 0;
+
+            iframe.onload = function() {
+                loader.style.display = 'none'; // Hide loader when iframe content is fully loaded
+                iframe.style.display = 'block'; // Show iframe
+            };
+
+            // Simulate progress loading
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    return;
+                }
+                progress += 1;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '%';
+
+                // Update loading text
+                loadingText.textContent = loadingMessages[messageIndex];
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+            }, 50); // Adjust interval as needed
+        });
+    </script>
+</body>
+</html>
