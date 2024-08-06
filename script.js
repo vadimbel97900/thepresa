@@ -36,6 +36,18 @@ function updateSlider() {
     showSlide(currentIndex);
 }
 
+
+// Переход на первый слайд
+function goToFirstSlide() {
+    showSlide(0); // Переход на первый слайд (индекс 0)
+}
+
+// Переход на шестой слайд
+function showSixSlide() {
+    showSlide(5); // Переход на шестой слайд (индекс 5, так как индексация начинается с 0)
+}
+
+
 function showSlide(index) {
     if (index >= slides.length) {
         currentIndex = 0;
