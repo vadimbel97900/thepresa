@@ -24,6 +24,8 @@ function updateSlider() {
             return `<iframe src="Слайд 6/6.html" class="slide" frameborder="0"></iframe>`;
         } else if (src.includes('p (7).png')) {
             return `<iframe src="Слайд 7/7.html" class="slide" frameborder="0"></iframe>`;
+        } else if (src.includes('p (8).png')) {
+            return `<iframe src="8.html" class="slide" frameborder="0"></iframe>`;
         } else if (src.includes('p (69).png')) {
             return `<video class="slide" controls>
                         <source src="SPIRIVA.mp4" type="video/mp4">
@@ -47,7 +49,17 @@ function showSixSlide() {
     showSlide(5); // Переход на шестой слайд (индекс 5, так как индексация начинается с 0)
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Добавляем обработчик кликов на кнопки
+    document.querySelectorAll('.button').forEach(button => {
+        button.addEventListener('click', () => {
+            const slideNumber = parseInt(button.getAttribute('data-slide'), 10);
+            showSlide(slideNumber - 1); // -1, потому что индексы в массиве начинаются с 0
+        });
+    });
+});
 
+// Функция для отображения слайда по индексу
 function showSlide(index) {
     if (index >= slides.length) {
         currentIndex = 0;
@@ -72,6 +84,7 @@ function showSlide(index) {
         controls.style.display = 'flex';
     }
 }
+
 
 function updateSlideContents() {
     // Загрузка текущего и ближайших слайдов
@@ -375,7 +388,6 @@ const closeButtonPositions = {
     'Посилання.webp': { top: '42%', left: '78%' } // Добавлена позиция для "Посилання"
 };
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     loadSlides();
     document.querySelector('.nav.literature').addEventListener('click', handleLiteratureClick);
@@ -386,7 +398,16 @@ document.addEventListener('DOMContentLoaded', () => {
     preloadImages(getSlidesToPreload());
     preloadImages(getLiteratureToPreload());
     getVideosToPreload().forEach(preloadVideo);
+
+    // Обработка кликов на кнопки слайдов
+    document.querySelectorAll('.button').forEach(button => {
+        button.addEventListener('click', () => {
+            const slideNumber = parseInt(button.getAttribute('data-slide'), 10);
+            showSlide(slideNumber - 1); // -1, потому что индексы в массиве начинаются с 0
+        });
+    });
 });
+
 
 // Переключение на следующий слайд
 function nextSlide() {
@@ -397,3 +418,24 @@ function nextSlide() {
 function prevSlide() {
     showSlide(currentIndex - 1);
 }
+
+// Обработка сообщений для переключения слайдов
+window.addEventListener('message', (event) => {
+    const { action } = event.data;
+    switch (action) {
+        case 'nextSlide':
+            nextSlide();
+            break;
+        case 'prevSlide':
+            prevSlide();
+            break;
+        case 'goToFirstSlide':
+            goToFirstSlide();
+            break;
+        case 'showSixSlide':
+            showSixSlide();
+            break;
+        default:
+            console.warn('Unknown action:', action);
+    }
+});
