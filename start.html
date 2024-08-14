@@ -9,10 +9,9 @@
             box-sizing: border-box;
         }
 
-       .hide-controls {
-    display: none !important;
+        .hide-controls {
+            display: none !important;
         }
-
 
         body {
             display: flex;
@@ -167,6 +166,11 @@
     <div class="slider-container">
         <div class="slider">
             <!-- Слайды загружаются динамически -->
+            <!-- Например: -->
+            <div class="slide"><iframe src="8.html" width="100%" height="100%" frameborder="0"></iframe></div>
+            <div class="slide">Slide 2 Content</div>
+            <div class="slide">Slide 3 Content</div>
+            <!-- Другие слайды -->
         </div>
         <div class="navigation-top">
             <div class="nav dots" style="background-image: url('Иконки/3 точки.png'); width: 2.5vw; height: 2.5vw;"></div>
@@ -185,5 +189,54 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        let currentSlideIndex = 0;
+
+        // Функция для отображения слайда по индексу
+        function showSlide(index) {
+            const slider = document.querySelector('.slider');
+            const slides = document.querySelectorAll('.slide');
+            const controls = document.querySelector('.navigation-bottom');
+            const totalSlides = slides.length;
+            index = (index + totalSlides) % totalSlides; // Циклический переход
+
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            currentSlideIndex = index; // Обновляем текущий индекс
+
+            // Скрыть или показать кнопки
+            const currentSlideSrc = slides[index].querySelector('iframe')?.src || slides[index].textContent;
+            if (currentSlideSrc.includes('6.html') || currentSlideSrc.includes('p (6).png') ||
+                currentSlideSrc.includes('7.html') || currentSlideSrc.includes('p (7).png') ||
+                currentSlideSrc.includes('SPIRIVA.mp4') || currentSlideSrc.includes('p (69).png')) {
+                controls.style.display = 'none';
+            } else {
+                controls.style.display = 'flex';
+            }
+        }
+
+        // Обработка сообщений
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.action === 'showSlide') {
+                showSlide(event.data.slide);
+            }
+        });
+
+        // Пример функций управления слайдером
+        function prevSlide() {
+            showSlide(currentSlideIndex - 1);
+        }
+
+        function nextSlide() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function showSixSlide() {
+            showSlide(5); // Пример для 6-го слайда (индекс 5)
+        }
+
+        function goToFirstSlide() {
+            showSlide(0); // Перейти к первому слайду
+        }
+    </script>
 </body>
 </html>
