@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пульсирующие волны</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="circle"></div>
+        <div class="wave animated"></div>
+        <div class="wave animated"></div>
+        <div class="wave animated"></div>
+        <div class="buttons">
+            <img src="Кнопки/k (1).png" alt="Button 1" class="button" data-slide="0">
+            <img src="Кнопки/k (2).png" alt="Button 2" class="button" data-slide="0">
+            <img src="Кнопки/k (3).png" alt="Button 3" class="button" data-slide="0">
+            <img src="Кнопки/k (4).png" alt="Button 4" class="button" data-slide="0">
+            <img src="Кнопки/k (5).png" alt="Button 5" class="button" data-slide="0">
+            <img src="Кнопки/k (6).png" alt="Button 6" class="button" data-slide="0">
+            <img src="Кнопки/k (7).png" alt="Button 7" class="button" data-slide="0">
+            <img src="Кнопки/k (8).png" alt="Button 8" class="button" data-slide="0">
+            <img src="Кнопки/k (9).png" alt="Button 9" class="button" data-slide="0">
+            <img src="Кнопки/k (10).png" alt="Button 10" class="button" data-slide="0">
+            <img src="Кнопки/k (11).png" alt="Button 11" class="button" data-slide="0">
+        </div>
+    </div>
+    <script>
+        // Отправляем сообщение о нажатой кнопке в родительское окно
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', function() {
+                const slideIndex = this.getAttribute('data-slide');
+                if (window.parent) {
+                    window.parent.postMessage({ action: 'showSlide', slide: slideIndex }, '*');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
