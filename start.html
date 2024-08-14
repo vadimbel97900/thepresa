@@ -196,28 +196,27 @@
         function showSlide(index) {
             const slider = document.querySelector('.slider');
             const slides = document.querySelectorAll('.slide');
-            const controls = document.querySelector('.navigation-bottom');
+            const controlsBottom = document.querySelector('.navigation-bottom');
             const totalSlides = slides.length;
             index = (index + totalSlides) % totalSlides; // Циклический переход
 
+            console.log(`Показ слайда с индексом: ${index}`); // Отладка
             slider.style.transform = `translateX(-${index * 100}%)`;
             currentSlideIndex = index; // Обновляем текущий индекс
 
-            // Скрыть или показать кнопки
-            const currentSlideSrc = slides[index].querySelector('iframe')?.src || slides[index].textContent;
-            if (currentSlideSrc.includes('6.html') || currentSlideSrc.includes('p (6).png') ||
-                currentSlideSrc.includes('7.html') || currentSlideSrc.includes('p (7).png') ||
-                currentSlideSrc.includes('SPIRIVA.mp4') || currentSlideSrc.includes('p (69).png')) {
-                controls.style.display = 'none';
+            // Условие для скрытия нижних иконок на определённых слайдах
+            if (index === 3 || index === 4) { // замените индексы на те, где должны скрываться иконки
+                controlsBottom.style.display = 'none';
             } else {
-                controls.style.display = 'flex';
+                controlsBottom.style.display = 'flex';
             }
         }
 
         // Обработка сообщений
         window.addEventListener('message', (event) => {
             if (event.data && event.data.action === 'showSlide') {
-                showSlide(event.data.slide);
+                console.log(`Получен индекс слайда: ${event.data.slide}`); // Отладка
+                showSlide(parseInt(event.data.slide, 10)); // Убедитесь, что индекс передается как целое число
             }
         });
 
