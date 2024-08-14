@@ -160,6 +160,19 @@
             background-position: center;
             cursor: pointer;
         }
+
+        /* Styles for slide number display */
+        .slide-number {
+            position: absolute;
+            top: 1vw;
+            right: 1vw;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 0.5vw 1vw;
+            border-radius: 5px;
+            font-size: 1.5vw;
+            z-index: 10; /* Ensure it is above other content */
+        }
     </style>
 </head>
 <body>
@@ -187,6 +200,7 @@
             <img id="overlay-image" src="" alt="Overlay Slide">
             <div class="close-button" onclick="hideOverlay()"></div> <!-- Close button -->
         </div>
+        <div class="slide-number" id="slide-number">1</div> <!-- Номер слайда -->
     </div>
     <script src="script.js"></script>
     <script>
@@ -203,6 +217,9 @@
             console.log(`Показ слайда с индексом: ${index}`); // Отладка
             slider.style.transform = `translateX(-${index * 100}%)`;
             currentSlideIndex = index; // Обновляем текущий индекс
+
+            // Обновляем номер текущего слайда
+            document.getElementById('slide-number').textContent = index + 1;
 
             // Условие для скрытия нижних иконок на определённых слайдах
             if (index === 3 || index === 4) { // замените индексы на те, где должны скрываться иконки
