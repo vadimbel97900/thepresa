@@ -1,258 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slider</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Image Slider</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
 
-        .hide-controls {
-            display: none !important;
-        }
+			.hide-controls {
+				display: none !important;
+			}
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background-color: #f0f0f0;
+				margin: 0;
+			}
 
-        .slider-container {
-            position: relative;
-            width: 90vw; /* Use viewport width for responsive scaling */
-            max-width: 1250px;
-            height: auto;
-            overflow: hidden;
-            border: 2px solid #ccc;
-            background-color: #fff;
-            aspect-ratio: 16 / 9; /* Maintain aspect ratio */
-        }
+			.slider-container {
+				position: relative;
+				width: 90vw; /* Use viewport width for responsive scaling */
+				max-width: 1250px;
+				height: auto;
+				overflow: hidden;
+				border: 2px solid #ccc;
+				background-color: #fff;
+				aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+			}
 
-        .slider {
-            display: flex;
-            height: 100%;
-            transition: transform 0.5s ease-in-out;
-        }
+			.slider {
+				display: flex;
+				height: 100%;
+				transition: transform 0.5s ease-in-out;
+			}
 
-        .slide {
-            min-width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+			.slide {
+				min-width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
 
-        .navigation-top,
-        .navigation-bottom {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease-in-out;
-        }
+			.navigation-top,
+			.navigation-bottom {
+				position: absolute;
+				display: flex;
+				align-items: center;
+				transition: all 0.2s ease-in-out;
+			}
 
-        .navigation-top {
-            top: 1vw;
-            left: 1vw;
-        }
+			.navigation-top {
+				top: 1vw;
+				left: 1vw;
+			}
 
-        .navigation-bottom {
-            bottom: 2vw; /* Increased padding to prevent clipping */
-            left: 1vw;
-            padding: 0.5vw; /* Padding to ensure icons fit properly */
-            gap: 2.2vw; /* Increased gap between icons */
-        }
+			.navigation-bottom {
+				bottom: 2vw; /* Increased padding to prevent clipping */
+				left: 1vw;
+				padding: 0.5vw; /* Padding to ensure icons fit properly */
+				gap: 2.2vw; /* Increased gap between icons */
+			}
 
-        .nav {
-            cursor: pointer;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transition: transform 0.2s ease-in-out;
-        }
+			.nav {
+				cursor: pointer;
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				transition: transform 0.2s ease-in-out;
+			}
 
-        .nav:hover {
-            transform: scale(1.1);
-        }
+			.nav:hover {
+				transform: scale(1.1);
+			}
 
-        /* Sizes for bottom icons */
-        .triangle {
-            background-image: url('Иконки/Триугольник.png');
-            width: 1.7vw; /* Size for triangle */
-            height: 1.7vw; /* Size for triangle */
-        }
+			/* Sizes for bottom icons */
+			.triangle {
+				background-image: url('Иконки/Триугольник.png');
+				width: 1.7vw; /* Size for triangle */
+				height: 1.7vw; /* Size for triangle */
+			}
 
-        .home {
-            background-image: url('Иконки/Дом.png');
-            width: 1.4vw; /* Size for home */
-            height: 1.4vw; /* Size for home */
-        }
+			.home {
+				background-image: url('Иконки/Дом.png');
+				width: 1.4vw; /* Size for home */
+				height: 1.4vw; /* Size for home */
+			}
 
-        .literature {
-            background-image: url('Иконки/Литература.png');
-            width: 8.1vw; /* Size for literature */
-            height: 8.1vw; /* Size for literature */
-        }
+			.literature {
+				background-image: url('Иконки/Литература.png');
+				width: 8.1vw; /* Size for literature */
+				height: 8.1vw; /* Size for literature */
+			}
 
-        .links {
-            background-image: url('Иконки/Посилання.webp');
-            width: 8.1vw; /* Size for links */
-            height: 8.1vw; /* Size for links */
-        }
+			.links {
+				background-image: url('Иконки/Посилання.webp');
+				width: 8.1vw; /* Size for links */
+				height: 8.1vw; /* Size for links */
+			}
 
-        .prev:hover {
-            background-image: url('Иконки/Назад актив.png');
-        }
+			.prev:hover {
+				background-image: url('Иконки/Назад актив.png');
+			}
 
-        .next:hover {
-            background-image: url('Иконки/Вперед актив.png');
-        }
+			.next:hover {
+				background-image: url('Иконки/Вперед актив.png');
+			}
 
-        .dots:hover {
-            /* Add a hover effect if needed */
-        }
+			.dots:hover {
+				/* Add a hover effect if needed */
+			}
 
-        .triangle:hover {
-            /* Add a hover effect if needed */
-        }
+			.triangle:hover {
+				/* Add a hover effect if needed */
+			}
 
-        .home:hover {
-            /* Add a hover effect if needed */
-        }
+			.home:hover {
+				/* Add a hover effect if needed */
+			}
 
-        .literature:hover {
-            /* Add a hover effect if needed */
-        }
+			.literature:hover {
+				/* Add a hover effect if needed */
+			}
 
-        .links:hover {
-            /* Add a hover effect if needed */
-        }
+			.links:hover {
+				/* Add a hover effect if needed */
+			}
 
-        /* Styles for overlay slide */
-        .overlay-slide {
-            display: none; /* Hidden by default */
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 20; /* Ensure it is on top of all other content */
-        }
+			/* Styles for overlay slide */
+			.overlay-slide {
+				display: none; /* Hidden by default */
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 20; /* Ensure it is on top of all other content */
+			}
 
-        .overlay-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+			.overlay-slide img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
 
-        .close-button {
-            position: absolute;
-            top: 42%; /* Center vertically */
-            left: 78%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Adjust for center alignment */
-            width: 4vw; /* Size of close button */
-            height: 4vw; /* Size of close button */
-            background-image: url('Иконки/Закрыть.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            cursor: pointer;
-        }
+			.close-button {
+				position: absolute;
+				top: 42%; /* Center vertically */
+				left: 78%; /* Center horizontally */
+				transform: translate(-50%, -50%); /* Adjust for center alignment */
+				width: 4vw; /* Size of close button */
+				height: 4vw; /* Size of close button */
+				background-image: url('Иконки/Закрыть.png');
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				cursor: pointer;
+			}
 
-        /* Styles for slide number display */
-        .slide-number {
-            position: absolute;
-            top: 1vw;
-            right: 1vw;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            padding: 0.5vw 1vw;
-            border-radius: 5px;
-            font-size: 1.5vw;
-            z-index: 10; /* Ensure it is above other content */
-        }
-    </style>
-</head>
-<body>
-    <div class="slider-container">
-        <div class="slider">
-            <!-- Слайды загружаются динамически -->
-            <!-- Например: -->
-            <div class="slide"><iframe src="8.html" width="100%" height="100%" frameborder="0"></iframe></div>
-            <div class="slide">Slide 2 Content</div>
-            <div class="slide">Slide 3 Content</div>
-            <!-- Другие слайды -->
-        </div>
-        <div class="navigation-top">
-            <div class="nav dots" style="background-image: url('Иконки/3 точки.png'); width: 2.5vw; height: 2.5vw;"></div>
-            <div class="nav prev" onclick="prevSlide()" style="background-image: url('Иконки/Назад.png'); width: 2.5vw; height: 2.5vw;"></div>
-            <div class="nav next" onclick="nextSlide()" style="background-image: url('Иконки/Вперед.png'); width: 2.5vw; height: 2.5vw;"></div>
-        </div>
-        <div class="navigation-bottom" style="bottom: -2.3vw; left: 1vw; padding: 0.5vw; gap: 2.2vw;">
-            <div class="nav triangle" onclick="showSixSlide()" style="background-image: url('Иконки/Триугольник.png'); width: 1.7vw; height: 1.7vw;"></div>
-            <div class="nav home" onclick="goToFirstSlide()" style="background-image: url('Иконки/Дом.png'); width: 1.4vw; height: 1.4vw;"></div>
-            <div class="nav literature" style="background-image: url('Иконки/Литература.png'); width: 8.1vw; height: 8.1vw;"></div>
-            <div class="nav links" style="background-image: url('Иконки/Посилання.webp'); width: 8.1vw; height: 8.1vw;"></div>
-        </div>
-        <div class="overlay-slide" id="overlay-slide">
-            <img id="overlay-image" src="" alt="Overlay Slide">
-            <div class="close-button" onclick="hideOverlay()"></div> <!-- Close button -->
-        </div>
-        <div class="slide-number" id="slide-number">1</div> <!-- Номер слайда -->
-    </div>
-    <script src="script.js"></script>
-    <script>
-        let currentSlideIndex = 0;
+			/* Styles for slide number display */
+			.slide-number {
+				position: absolute;
+				top: 1vw;
+				right: 1vw;
+				background-color: rgba(0, 0, 0, 0.5);
+				color: #fff;
+				padding: 0.5vw 1vw;
+				border-radius: 5px;
+				font-size: 1.5vw;
+				z-index: 10; /* Ensure it is above other content */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="slider-container">
+			<div class="slider">
+				<!-- Слайды загружаются динамически -->
+				<!-- Например: -->
+				<div class="slide">
+					<iframe
+						src="8.html"
+						width="100%"
+						height="100%"
+						frameborder="0"
+					></iframe>
+				</div>
+				<div class="slide">Slide 2 Content</div>
+				<div class="slide">Slide 3 Content</div>
+				<!-- Другие слайды -->
+			</div>
+			<div class="navigation-top">
+				<div
+					class="nav dots"
+					style="
+						background-image: url('Иконки/3 точки.png');
+						width: 2.5vw;
+						height: 2.5vw;
+					"
+				></div>
+				<div
+					class="nav prev"
+					onclick="prevSlide()"
+					style="
+						background-image: url('Иконки/Назад.png');
+						width: 2.5vw;
+						height: 2.5vw;
+					"
+				></div>
+				<div
+					class="nav next"
+					onclick="nextSlide()"
+					style="
+						background-image: url('Иконки/Вперед.png');
+						width: 2.5vw;
+						height: 2.5vw;
+					"
+				></div>
+			</div>
+			<div
+				class="navigation-bottom"
+				style="bottom: -2.3vw; left: 1vw; padding: 0.5vw; gap: 2.2vw"
+			>
+				<div
+					class="nav triangle"
+					onclick="showSixSlide()"
+					style="
+						background-image: url('Иконки/Триугольник.png');
+						width: 1.7vw;
+						height: 1.7vw;
+					"
+				></div>
+				<div
+					class="nav home"
+					onclick="goToFirstSlide()"
+					style="
+						background-image: url('Иконки/Дом.png');
+						width: 1.4vw;
+						height: 1.4vw;
+					"
+				></div>
+				<div
+					class="nav literature"
+					style="
+						background-image: url('Иконки/Литература.png');
+						width: 8.1vw;
+						height: 8.1vw;
+					"
+				></div>
+				<div
+					class="nav links"
+					style="
+						background-image: url('Иконки/Посилання.webp');
+						width: 8.1vw;
+						height: 8.1vw;
+					"
+				></div>
+			</div>
+			<div class="overlay-slide" id="overlay-slide">
+				<img id="overlay-image" src="" alt="Overlay Slide" />
+				<div class="close-button" onclick="hideOverlay()"></div>
+				<!-- Close button -->
+			</div>
+			<div class="slide-number" id="slide-number">1</div>
+			<!-- Номер слайда -->
+		</div>
+		<script>
+			let currentSlideIndex = 0;
 
-        // Функция для отображения слайда по индексу
-        function showSlide(index) {
-            const slider = document.querySelector('.slider');
-            const slides = document.querySelectorAll('.slide');
-            const controlsBottom = document.querySelector('.navigation-bottom');
-            const totalSlides = slides.length;
-            index = (index + totalSlides) % totalSlides; // Циклический переход
+			// Функция для отображения слайда по индексу
+			function showSlide(index) {
+				const slider = document.querySelector('.slider');
+				const slides = document.querySelectorAll('.slide');
+				const controlsBottom = document.querySelector('.navigation-bottom');
+				const totalSlides = slides.length;
+				index = (index + totalSlides) % totalSlides; // Циклический переход
 
-            console.log(`Показ слайда с индексом: ${index}`); // Отладка
-            slider.style.transform = `translateX(-${index * 100}%)`;
-            currentSlideIndex = index; // Обновляем текущий индекс
+				console.log(`Показ слайда с индексом: ${index}`); // Отладка
+				slider.style.transform = `translateX(-${index * 100}%)`;
+				currentSlideIndex = index; // Обновляем текущий индекс
 
-            // Обновляем номер текущего слайда
-            document.getElementById('slide-number').textContent = index + 1;
+				// Обновляем номер текущего слайда
+				document.getElementById('slide-number').textContent = index + 1;
 
-            // Условие для скрытия нижних иконок на определённых слайдах
-            if (index === 3 || index === 4) { // замените индексы на те, где должны скрываться иконки
-                controlsBottom.style.display = 'none';
-            } else {
-                controlsBottom.style.display = 'flex';
-            }
-        }
+				// Условие для скрытия нижних иконок на определённых слайдах
+				if (currentSlideIndex === 37) {
+					// замените индексы на те, где должны скрываться иконки
+					controlsBottom.style.display = 'none';
+				} else {
+					controlsBottom.style.display = 'flex';
+				}
+			}
 
-        // Обработка сообщений
-        window.addEventListener('message', (event) => {
-            if (event.data && event.data.action === 'showSlide') {
-                console.log(`Получен индекс слайда: ${event.data.slide}`); // Отладка
-                showSlide(parseInt(event.data.slide, 10)); // Убедитесь, что индекс передается как целое число
-            }
-        });
+			// Обработка сообщений
+			window.addEventListener('message', event => {
+				if (event.data && event.data.action === 'showSlide') {
+					console.log(`Получен индекс слайда: ${event.data.slide}`); // Отладка
+					showSlide(parseInt(event.data.slide, 10)); // Убедитесь, что индекс передается как целое число
+				}
+			});
 
-        // Пример функций управления слайдером
-        function prevSlide() {
-            showSlide(currentSlideIndex - 1);
-        }
+			// Пример функций управления слайдером
+			function prevSlide() {
+				showSlide(currentSlideIndex - 1);
+			}
 
-        function nextSlide() {
-            showSlide(currentSlideIndex + 1);
-        }
+			function nextSlide() {
+				showSlide(currentSlideIndex + 1);
+			}
 
-        function showSixSlide() {
-            showSlide(5); // Пример для 6-го слайда (индекс 5)
-        }
+			function showSixSlide() {
+				showSlide(5); // Пример для 6-го слайда (индекс 5)
+			}
 
-        function goToFirstSlide() {
-            showSlide(0); // Перейти к первому слайду
-        }
-    </script>
-</body>
+			function goToFirstSlide() {
+				showSlide(0); // Перейти к первому слайду
+			}
+		</script>
+		<script src="script.js"></script>
+	</body>
 </html>
