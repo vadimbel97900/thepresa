@@ -474,6 +474,7 @@ const closeButtonPositions = {
 	'p (110).png': { top: '36%', left: '78%' },
 	'p (300).png': { top: '18%', left: '78%' },
 	'p (301).png': { top: '20%', left: '78%' },
+	'Посилання 21.png': { top: '10%', left: '78%' },
 	'Посилання.webp': { top: '42%', left: '78%' } // Добавлена позиция для "Посилання"
 };
 
@@ -482,9 +483,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	document
 		.querySelector('.nav.literature')
 		.addEventListener('click', handleLiteratureClick);
-	document
+		document
 		.querySelector('.nav.links')
-		.addEventListener('click', () => showOverlay('Posilanna/Посилання.webp'));
+		.addEventListener('click', () => {
+			if (currentIndex + 1 === 21) {
+				showOverlay('Posilanna/Посилання 21.png');
+			} else {
+				showOverlay('Posilanna/Посилання.webp');
+			}
+		});
+	
 	document
 		.querySelector('.close-button')
 		.addEventListener('click', hideOverlay);
