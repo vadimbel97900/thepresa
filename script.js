@@ -79,9 +79,23 @@ function loadSlides() {
 		110,
 		'110+1',
 		111,
+		106,
+		107,
+		108,
 		112,
+		98,
+		99,
+		100,
+		101,
 		113,
-		114
+		85,
+		86,
+		87,
+		88,
+		114,
+		92,
+		93,
+		94
 	];
 	slideNumbers.forEach(num => slides.push(`${basePath}p (${num}).png`));
 	updateSlider();
