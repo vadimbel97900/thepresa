@@ -1,4 +1,6 @@
 let currentIndex = 0;
+let startX;
+let isSwiping = false;
 const slides = [];
 const overlaySlide = document.getElementById('overlay-slide');
 const overlayImage = document.getElementById('overlay-image');
@@ -149,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 });
+
+
 
 // Функция для отображения слайда по индексу
 function showSlide(index) {
@@ -543,6 +547,46 @@ function prevSlide() {
 	currentIndex = currentIndex - 1;
 	showSlide(currentIndex);
 }
+
+// Переключение на следующий слайд
+function nextSlide() {
+	currentIndex = currentIndex + 1;
+	showSlide(currentIndex);
+}
+
+// Обработчики свайпов
+function handleSwipeStart(event) {
+	isSwiping = true;
+	startX = event.type === 'touchstart' ? event.touches[0].clientX : event.clientX;
+}
+
+function handleSwipeMove(event) {
+	if (!isSwiping) return;
+
+	const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+	const diffX = startX - currentX;
+
+	if (diffX > 50) {
+		nextSlide();
+		isSwiping = false;
+	} else if (diffX < -50) {
+		prevSlide();
+		isSwiping = false;
+	}
+}
+
+function handleSwipeEnd() {
+	isSwiping = false;
+}
+
+// Добавьте обработчики для мыши и сенсорных экранов
+sliderContainer.addEventListener('mousedown', handleSwipeStart);
+sliderContainer.addEventListener('mousemove', handleSwipeMove);
+sliderContainer.addEventListener('mouseup', handleSwipeEnd);
+
+sliderContainer.addEventListener('touchstart', handleSwipeStart);
+sliderContainer.addEventListener('touchmove', handleSwipeMove);
+sliderContainer.addEventListener('touchend', handleSwipeEnd);
 
 // Обработка сообщений для переключения слайдов
 window.addEventListener('message', event => {
