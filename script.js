@@ -109,36 +109,6 @@ function loadSlides() {
 	slideNumbers.forEach(num => slides.push(`${basePath}p (${num}).png`));
 	updateSlider();
 }
-loadSlides();
-
-let btn = document.querySelector('.nav.dots');
-let modal = document.querySelector('.modal');
-let closeIcon = document.querySelector('.close-icon');
-btn.onclick = () => {
-	modal.classList.add('active');
-
-	modal.querySelector('.modal-content').onclick = e => {
-		e.preventDefault();
-		if (e.target.closest('.slide-link')) {
-			let id = +e.target.closest('.slide-link').getAttribute('data-id');
-			currentIndex = id;
-			modal.classList.remove('active');
-			showSlide(currentIndex);
-		}
-	};
-};
-closeIcon.onclick = () => {
-	modal.classList.remove('active');
-};
-
-if (slides.length > 0) {
-	console.log(slides.length);
-	for (let i = 0; i < slides.length; i++) {
-		modal.querySelector(
-			'.modal-content'
-		).innerHTML += `<a class="slide-link" data-id="${i}" href="#"><img src="${slides[i]}" /></a>`;
-	}
-}
 
 function updateSlider() {
 	sliderContainer.innerHTML = slides
@@ -181,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 });
+
+
 
 // Функция для отображения слайда по индексу
 function showSlide(index) {
@@ -532,18 +504,20 @@ const closeButtonPositions = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-	// loadSlides();
+	loadSlides();
 	document
 		.querySelector('.nav.literature')
 		.addEventListener('click', handleLiteratureClick);
-	document.querySelector('.nav.links').addEventListener('click', () => {
-		if (currentIndex + 1 === 21) {
-			showOverlay('Posilanna/Посилання 21.png');
-		} else {
-			showOverlay('Posilanna/Посилання.webp');
-		}
-	});
-
+		document
+		.querySelector('.nav.links')
+		.addEventListener('click', () => {
+			if (currentIndex + 1 === 21) {
+				showOverlay('Posilanna/Посилання 21.png');
+			} else {
+				showOverlay('Posilanna/Посилання.webp');
+			}
+		});
+	
 	document
 		.querySelector('.close-button')
 		.addEventListener('click', hideOverlay);
@@ -580,28 +554,29 @@ function nextSlide() {
 	showSlide(currentIndex);
 }
 
+
+
 // Обработчики свайпов
 function handleSwipeStart(event) {
 	isSwiping = true;
-	startX =
-		event.type === 'touchstart' ? event.touches[0].clientX : event.clientX;
+	startX = event.type === 'touchstart' ? event.touches[0].clientX : event.clientX;
 }
 
 function handleSwipeMove(event) {
-	if (!isSwiping) return;
+    if (!isSwiping) return;
 
-	const currentX =
-		event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
-	const diffX = startX - currentX;
+    const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+    const diffX = startX - currentX;
 
-	if (diffX > 50) {
-		nextSlide();
-		isSwiping = false;
-	} else if (diffX < -50) {
-		prevSlide();
-		isSwiping = false;
-	}
+    if (diffX > 50) {
+        nextSlide();
+        isSwiping = false;
+    } else if (diffX < -50) {
+        prevSlide();
+        isSwiping = false;
+    }
 }
+
 
 function handleSwipeEnd() {
 	isSwiping = false;
